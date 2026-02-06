@@ -131,6 +131,16 @@ resource "aws_vpc_security_group_ingress_rule" "cuez_https" {
   cidr_ipv4         = each.value
 }
 
+# RDP (3389/TCP) - Public access (TEMPORARY)
+resource "aws_vpc_security_group_ingress_rule" "cuez_rdp_public" {
+  security_group_id = aws_security_group.cuez.id
+  description       = "RDP access from anywhere (TEMPORARY)"
+  from_port         = 3389
+  to_port           = 3389
+  ip_protocol       = "tcp"
+  cidr_ipv4         = "0.0.0.0/0"
+}
+
 # HTTP (80/TCP) - Public access
 resource "aws_vpc_security_group_ingress_rule" "cuez_http_public" {
   security_group_id = aws_security_group.cuez.id
