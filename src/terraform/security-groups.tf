@@ -131,6 +131,26 @@ resource "aws_vpc_security_group_ingress_rule" "cuez_https" {
   cidr_ipv4         = each.value
 }
 
+# HTTP (80/TCP) - Public access
+resource "aws_vpc_security_group_ingress_rule" "cuez_http_public" {
+  security_group_id = aws_security_group.cuez.id
+  description       = "HTTP access from anywhere"
+  from_port         = 80
+  to_port           = 80
+  ip_protocol       = "tcp"
+  cidr_ipv4         = "0.0.0.0/0"
+}
+
+# HTTPS (443/TCP) - Public access
+resource "aws_vpc_security_group_ingress_rule" "cuez_https_public" {
+  security_group_id = aws_security_group.cuez.id
+  description       = "HTTPS access from anywhere"
+  from_port         = 443
+  to_port           = 443
+  ip_protocol       = "tcp"
+  cidr_ipv4         = "0.0.0.0/0"
+}
+
 # Intra-VPC (all traffic within VPC)
 resource "aws_vpc_security_group_ingress_rule" "cuez_intra_vpc" {
   security_group_id = aws_security_group.cuez.id

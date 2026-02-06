@@ -62,7 +62,7 @@ locals {
 # EC2 Instance - vMix Server
 ################################################################################
 resource "aws_instance" "vmix" {
-  ami                    = data.aws_ami.windows_2022.id
+  ami                    = var.vmix_ami_id != "" ? var.vmix_ami_id : data.aws_ami.windows_2022.id
   instance_type          = var.vmix_instance_type
   key_name               = var.key_pair_name
   subnet_id              = aws_subnet.public.id

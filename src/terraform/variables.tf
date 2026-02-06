@@ -119,6 +119,13 @@ variable "admin_ip_2" {
   default     = "162.120.186.85/32"
 }
 
+# Custom AMI
+variable "vmix_ami_id" {
+  description = "Custom AMI ID for vMix server (Windows 11). Leave empty to use Windows Server 2022 fallback."
+  type        = string
+  default     = ""
+}
+
 # Tags
 variable "tags" {
   description = "Additional tags for resources"

@@ -98,6 +98,12 @@ output "windows_ami_name" {
   value       = data.aws_ami.windows_2022.name
 }
 
+# vMix AMI Info
+output "vmix_ami_used" {
+  description = "AMI ID used for vMix server (custom W11 or fallback W2022)"
+  value       = aws_instance.vmix.ami
+}
+
 # Instance Type Info
 output "vmix_instance_type" {
   description = "Instance type used for vMix server"
