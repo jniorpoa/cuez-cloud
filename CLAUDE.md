@@ -6,8 +6,8 @@ Este projeto gerencia a infraestrutura AWS para servidores de broadcast vMix e C
 
 ## Architecture Overview
 
-- **VPC**: 10.0.0.0/16 com subnet pública 10.0.1.0/24
-- **EC2 vMix**: t3.xlarge, 500GB gp3, Windows Server 2022
+- **VPC**: 10.15.0.0/16 com subnet pública 10.15.0.0/24 (prod-public-a)
+- **EC2 vMix**: g4dn.2xlarge (8 vCPU, 32GB, NVIDIA T4), 500GB gp3, Windows Server 2022
 - **EC2 Cuez**: t3.large, 500GB gp3, Windows Server 2022
 - **Security**: Allowlist por provedor (ALGAR, MUNDIVOX, EMBRATEL, SAMM)
 

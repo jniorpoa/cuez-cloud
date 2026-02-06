@@ -21,13 +21,13 @@ provider "aws" {
     tags = {
       Project     = var.project_name
       Environment = var.environment
-      ManagedBy   = "Terraform"
+      ManagedBy   = "terraform"
     }
   }
 }
 
-# Data source para Windows 11 AMI mais recente
-data "aws_ami" "windows_11" {
+# Data source para Windows Server 2022 AMI mais recente
+data "aws_ami" "windows_2022" {
   most_recent = true
   owners      = ["amazon"]
 

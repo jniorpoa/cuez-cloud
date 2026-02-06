@@ -1,5 +1,11 @@
 ################################################################################
 # Cuez Cloud - VPC Configuration
+#
+# Padrão de subnets LiveMode:
+#   prod-public-a  = 10.15.0.0/24  (sa-east-1a)
+#   prod-public-b  = 10.15.1.0/24  (sa-east-1b) — reservado
+#   prod-public-c  = 10.15.2.0/24  (sa-east-1c) — reservado
+#   prod-private-a = 10.15.10.0/24 (sa-east-1a) — reservado
 ################################################################################
 
 # VPC Principal
@@ -8,9 +14,9 @@ resource "aws_vpc" "main" {
   enable_dns_hostnames = true
   enable_dns_support   = true
 
-  tags = merge(var.tags, {
-    Name = "${var.project_name}-vpc"
-  })
+  tags = {
+    Name = "prod-vpc"
+  }
 }
 
 # Subnet Pública
@@ -20,19 +26,19 @@ resource "aws_subnet" "public" {
   availability_zone       = var.availability_zone
   map_public_ip_on_launch = true
 
-  tags = merge(var.tags, {
-    Name = "${var.project_name}-public-subnet"
+  tags = {
+    Name = "prod-public-a"
     Type = "Public"
-  })
+  }
 }
 
 # Internet Gateway
 resource "aws_internet_gateway" "main" {
   vpc_id = aws_vpc.main.id
 
-  tags = merge(var.tags, {
-    Name = "${var.project_name}-igw"
-  })
+  tags = {
+    Name = "prod-igw"
+  }
 }
 
 # Route Table Pública
@@ -44,9 +50,9 @@ resource "aws_route_table" "public" {
     gateway_id = aws_internet_gateway.main.id
   }
 
-  tags = merge(var.tags, {
-    Name = "${var.project_name}-public-rt"
-  })
+  tags = {
+    Name = "prod-public-rt"
+  }
 }
 
 # Associação Route Table com Subnet

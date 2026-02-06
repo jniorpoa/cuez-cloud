@@ -17,13 +17,13 @@ locals {
 # Security Group - vMix Server
 ################################################################################
 resource "aws_security_group" "vmix" {
-  name        = "${var.project_name}-sg-vmix"
+  name        = "prod-sg-vmix"
   description = "Security group for vMix server"
   vpc_id      = aws_vpc.main.id
 
-  tags = merge(var.tags, {
-    Name = "${var.project_name}-sg-vmix"
-  })
+  tags = {
+    Name = "prod-sg-vmix"
+  }
 }
 
 # RDP (3389/TCP) - Allowlist
@@ -84,13 +84,13 @@ resource "aws_vpc_security_group_egress_rule" "vmix_egress" {
 # Security Group - Cuez Server
 ################################################################################
 resource "aws_security_group" "cuez" {
-  name        = "${var.project_name}-sg-cuez"
+  name        = "prod-sg-cuez"
   description = "Security group for Cuez server"
   vpc_id      = aws_vpc.main.id
 
-  tags = merge(var.tags, {
-    Name = "${var.project_name}-sg-cuez"
-  })
+  tags = {
+    Name = "prod-sg-cuez"
+  }
 }
 
 # RDP (3389/TCP) - Allowlist

@@ -90,10 +90,16 @@ output "rdp_connection_cuez" {
 # AMI Info
 output "windows_ami_id" {
   description = "Windows AMI ID used"
-  value       = data.aws_ami.windows_11.id
+  value       = data.aws_ami.windows_2022.id
 }
 
 output "windows_ami_name" {
   description = "Windows AMI name"
-  value       = data.aws_ami.windows_11.name
+  value       = data.aws_ami.windows_2022.name
+}
+
+# Instance Type Info
+output "vmix_instance_type" {
+  description = "Instance type used for vMix server"
+  value       = aws_instance.vmix.instance_type
 }

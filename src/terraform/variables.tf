@@ -16,22 +16,22 @@ variable "project_name" {
 }
 
 variable "environment" {
-  description = "Environment (dev, staging, prod)"
+  description = "Environment (dev, staging, production)"
   type        = string
-  default     = "prod"
+  default     = "production"
 }
 
 # VPC Configuration
 variable "vpc_cidr" {
   description = "CIDR block for VPC"
   type        = string
-  default     = "10.0.0.0/16"
+  default     = "10.15.0.0/16"
 }
 
 variable "subnet_cidr" {
   description = "CIDR block for public subnet"
   type        = string
-  default     = "10.0.1.0/24"
+  default     = "10.15.0.0/24"
 }
 
 variable "availability_zone" {
@@ -42,9 +42,15 @@ variable "availability_zone" {
 
 # EC2 Configuration
 variable "vmix_instance_type" {
-  description = "Instance type for vMix server"
+  description = "Instance type for vMix server (g4dn.2xlarge = 8 vCPU, 32GB, NVIDIA T4)"
   type        = string
-  default     = "t3.xlarge"
+  default     = "g4dn.2xlarge"
+}
+
+variable "enable_nvidia_driver" {
+  description = "Enable NVIDIA GRID driver installation via user_data on vMix instance"
+  type        = bool
+  default     = true
 }
 
 variable "cuez_instance_type" {
