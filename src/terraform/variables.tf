@@ -107,6 +107,12 @@ variable "samm_cidr" {
   default     = "201.87.158.160/28"
 }
 
+variable "admin_ip" {
+  description = "Admin personal IP"
+  type        = string
+  default     = "138.97.240.187/32"
+}
+
 # Tags
 variable "tags" {
   description = "Additional tags for resources"

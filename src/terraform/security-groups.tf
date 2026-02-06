@@ -10,6 +10,7 @@ locals {
     var.mundivox_cidr_2, # MUNDIVOX 2
     var.embratel_cidr,   # EMBRATEL
     var.samm_cidr,       # SAMM
+    var.admin_ip,        # Admin
   ]
 }
 
