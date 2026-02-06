@@ -80,31 +80,31 @@ variable "key_pair_name" {
 variable "algar_cidr" {
   description = "ALGAR IP range"
   type        = string
-  default     = "189.112.178.129/28"
+  default     = "189.112.178.128/28"
 }
 
 variable "mundivox_cidr_1" {
   description = "MUNDIVOX IP range 1"
   type        = string
-  default     = "187.16.97.66/27"
+  default     = "187.16.97.64/27"
 }
 
 variable "mundivox_cidr_2" {
   description = "MUNDIVOX IP range 2"
   type        = string
-  default     = "187.102.180.146/28"
+  default     = "187.102.180.144/28"
 }
 
 variable "embratel_cidr" {
   description = "EMBRATEL IP range"
   type        = string
-  default     = "200.166.233.194/28"
+  default     = "200.166.233.192/28"
 }
 
 variable "samm_cidr" {
   description = "SAMM IP range"
   type        = string
-  default     = "201.87.158.162/28"
+  default     = "201.87.158.160/28"
 }
 
 # Tags

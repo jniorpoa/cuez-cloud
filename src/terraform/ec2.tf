@@ -6,7 +6,7 @@
 # Locals - NVIDIA GRID Driver user_data
 ################################################################################
 locals {
-  nvidia_driver_userdata = var.enable_nvidia_driver ? <<-USERDATA
+  nvidia_driver_script = <<-USERDATA
     <powershell>
     # NVIDIA GRID Driver Installation for g4dn instances
     # Downloads from AWS official S3 bucket (free for EC2 GPU instances)
@@ -54,7 +54,8 @@ locals {
     Write-Log "user_data script finished"
     </powershell>
   USERDATA
-  : null
+
+  nvidia_driver_userdata = var.enable_nvidia_driver ? local.nvidia_driver_script : null
 }
 
 ################################################################################
@@ -73,10 +74,6 @@ resource "aws_instance" "vmix" {
     volume_type           = var.ebs_volume_type
     encrypted             = true
     delete_on_termination = true
-
-    tags = {
-      Name = "prod-vmix-root"
-    }
   }
 
   tags = {
@@ -108,10 +105,6 @@ resource "aws_instance" "cuez" {
     volume_type           = var.ebs_volume_type
     encrypted             = true
     delete_on_termination = true
-
-    tags = {
-      Name = "prod-cuez-root"
-    }
   }
 
   tags = {

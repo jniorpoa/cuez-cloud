@@ -24,11 +24,11 @@ enable_nvidia_driver = true
 key_pair_name = "YOUR_KEY_PAIR_NAME"
 
 # Allowlist IPs (defaults provided, adjust if needed)
-# algar_cidr      = "189.112.178.129/28"
-# mundivox_cidr_1 = "187.16.97.66/27"
-# mundivox_cidr_2 = "187.102.180.146/28"
-# embratel_cidr   = "200.166.233.194/28"
-# samm_cidr       = "201.87.158.162/28"
+# algar_cidr      = "189.112.178.128/28"
+# mundivox_cidr_1 = "187.16.97.64/27"
+# mundivox_cidr_2 = "187.102.180.144/28"
+# embratel_cidr   = "200.166.233.192/28"
+# samm_cidr       = "201.87.158.160/28"
 
 # Additional tags
 tags = {
