@@ -11,6 +11,7 @@ locals {
     var.embratel_cidr,   # EMBRATEL
     var.samm_cidr,       # SAMM
     var.admin_ip,        # Admin
+    var.admin_ip_2,      # Admin 2
   ]
 }
 

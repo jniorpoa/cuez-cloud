@@ -113,6 +113,12 @@ variable "admin_ip" {
   default     = "138.97.240.187/32"
 }
 
+variable "admin_ip_2" {
+  description = "Admin secondary IP"
+  type        = string
+  default     = "162.120.186.85/32"
+}
+
 # Tags
 variable "tags" {
   description = "Additional tags for resources"
