@@ -1,6 +1,6 @@
 ################################################################################
 # Cuez Cloud - Main Terraform Configuration
-# Provider AWS sa-east-1 (São Paulo)
+# Multi-Region: sa-east-1 (São Paulo) + us-east-1 (Virginia)
 ################################################################################
 
 terraform {
@@ -14,6 +14,7 @@ terraform {
   }
 }
 
+# Provider padrão — sa-east-1 (São Paulo)
 provider "aws" {
   region = var.aws_region
 
@@ -26,14 +27,50 @@ provider "aws" {
   }
 }
 
-# Data source para Windows Server 2022 AMI mais recente
-data "aws_ami" "windows_2022" {
+# Provider aliased — us-east-1 (Virginia)
+provider "aws" {
+  alias  = "virginia"
+  region = "us-east-1"
+
+  default_tags {
+    tags = {
+      Project     = var.project_name
+      Environment = var.environment
+      ManagedBy   = "terraform"
+    }
+  }
+}
+
+# AMI Windows Server 2025 — São Paulo (sa-east-1)
+data "aws_ami" "windows_2025" {
   most_recent = true
   owners      = ["amazon"]
 
   filter {
     name   = "name"
-    values = ["Windows_Server-2022-English-Full-Base-*"]
+    values = ["Windows_Server-2025-English-Full-Base-*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  filter {
+    name   = "architecture"
+    values = ["x86_64"]
+  }
+}
+
+# AMI Windows Server 2025 — Virginia (us-east-1)
+data "aws_ami" "windows_2025_virginia" {
+  provider    = aws.virginia
+  most_recent = true
+  owners      = ["amazon"]
+
+  filter {
+    name   = "name"
+    values = ["Windows_Server-2025-English-Full-Base-*"]
   }
 
   filter {

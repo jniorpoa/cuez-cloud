@@ -1,10 +1,11 @@
 ################################################################################
 # Cuez Cloud - Variables
+# Multi-Region: sa-east-1 (São Paulo) + us-east-1 (Virginia)
 ################################################################################
 
 # AWS Configuration
 variable "aws_region" {
-  description = "AWS region for resources"
+  description = "AWS region for primary resources (São Paulo)"
   type        = string
   default     = "sa-east-1"
 }
@@ -21,30 +22,55 @@ variable "environment" {
   default     = "production"
 }
 
-# VPC Configuration
+# VPC Configuration — São Paulo (sa-east-1)
 variable "vpc_cidr" {
-  description = "CIDR block for VPC"
+  description = "CIDR block for São Paulo VPC"
   type        = string
-  default     = "10.15.0.0/16"
+  default     = "10.15.11.0/24"
 }
 
 variable "subnet_cidr" {
-  description = "CIDR block for public subnet"
+  description = "CIDR block for São Paulo public subnet"
   type        = string
-  default     = "10.15.0.0/24"
+  default     = "10.15.11.0/24"
 }
 
 variable "availability_zone" {
-  description = "Availability zone for subnet"
+  description = "Availability zone for São Paulo subnet"
   type        = string
   default     = "sa-east-1a"
 }
 
-# EC2 Configuration
+# VPC Configuration — Virginia (us-east-1)
+variable "virginia_vpc_cidr" {
+  description = "CIDR block for Virginia VPC"
+  type        = string
+  default     = "10.15.1.0/24"
+}
+
+variable "virginia_subnet_cidr" {
+  description = "CIDR block for Virginia public subnet"
+  type        = string
+  default     = "10.15.1.0/24"
+}
+
+variable "virginia_az" {
+  description = "Availability zone for Virginia subnet"
+  type        = string
+  default     = "us-east-1a"
+}
+
+# EC2 Configuration — vMix (São Paulo)
 variable "vmix_instance_type" {
   description = "Instance type for vMix server (g4dn.2xlarge = 8 vCPU, 32GB, NVIDIA T4)"
   type        = string
   default     = "g4dn.2xlarge"
+}
+
+variable "vmix_ebs_volume_size" {
+  description = "EBS volume size in GB for vMix server"
+  type        = number
+  default     = 500
 }
 
 variable "enable_nvidia_driver" {
@@ -53,18 +79,33 @@ variable "enable_nvidia_driver" {
   default     = true
 }
 
-variable "cuez_instance_type" {
-  description = "Instance type for Cuez server"
+# EC2 Configuration — Gateway (Virginia)
+variable "gateway_instance_type" {
+  description = "Instance type for Gateway server"
   type        = string
   default     = "t3.large"
 }
 
-variable "ebs_volume_size" {
-  description = "EBS volume size in GB"
+variable "gateway_ebs_volume_size" {
+  description = "EBS volume size in GB for Gateway server"
   type        = number
-  default     = 500
+  default     = 100
 }
 
+# EC2 Configuration — Automator (Virginia)
+variable "automator_instance_type" {
+  description = "Instance type for Automator server"
+  type        = string
+  default     = "t3.large"
+}
+
+variable "automator_ebs_volume_size" {
+  description = "EBS volume size in GB for Automator server"
+  type        = number
+  default     = 100
+}
+
+# Common EC2 Configuration
 variable "ebs_volume_type" {
   description = "EBS volume type"
   type        = string
@@ -119,11 +160,10 @@ variable "admin_ip_2" {
   default     = "162.120.186.85/32"
 }
 
-# Custom AMI
-variable "vmix_ami_id" {
-  description = "Custom AMI ID for vMix server (Windows 11). Leave empty to use Windows Server 2022 fallback."
+variable "admin_ip_3" {
+  description = "Admin tertiary IP"
   type        = string
-  default     = ""
+  default     = "201.54.232.170/32"
 }
 
 # Tags

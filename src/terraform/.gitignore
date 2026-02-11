@@ -30,4 +30,5 @@ terraform.rc
 
 # Plan files
 *.tfplan
+tfplan
 out.plan

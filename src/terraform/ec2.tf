@@ -1,5 +1,5 @@
 ################################################################################
-# Cuez Cloud - EC2 Instances
+# Cuez Cloud - EC2 Instances (Multi-Region)
 ################################################################################
 
 ################################################################################
@@ -59,26 +59,27 @@ locals {
 }
 
 ################################################################################
-# EC2 Instance - vMix Server
+# EC2 Instance - vMix Server (São Paulo)
 ################################################################################
 resource "aws_instance" "vmix" {
-  ami                    = var.vmix_ami_id != "" ? var.vmix_ami_id : data.aws_ami.windows_2022.id
+  ami                    = data.aws_ami.windows_2025.id
   instance_type          = var.vmix_instance_type
   key_name               = var.key_pair_name
-  subnet_id              = aws_subnet.public.id
+  subnet_id              = aws_subnet.saopaulo_public.id
   vpc_security_group_ids = [aws_security_group.vmix.id]
   user_data              = local.nvidia_driver_userdata
 
   root_block_device {
-    volume_size           = var.ebs_volume_size
+    volume_size           = var.vmix_ebs_volume_size
     volume_type           = var.ebs_volume_type
     encrypted             = true
     delete_on_termination = true
   }
 
   tags = {
-    Name = "prod-vmix"
-    Role = "vMix-Server"
+    Name   = "prod-vmix"
+    Role   = "vMix-Server"
+    Region = "sa-east-1"
   }
 
   volume_tags = {
@@ -86,34 +87,36 @@ resource "aws_instance" "vmix" {
   }
 
   lifecycle {
-    ignore_changes = [ami, user_data]
+    ignore_changes = [user_data]
   }
 }
 
 ################################################################################
-# EC2 Instance - Cuez Server
+# EC2 Instance - Gateway Server (Virginia)
 ################################################################################
-resource "aws_instance" "cuez" {
-  ami                    = data.aws_ami.windows_2022.id
-  instance_type          = var.cuez_instance_type
+resource "aws_instance" "gateway" {
+  provider               = aws.virginia
+  ami                    = data.aws_ami.windows_2025_virginia.id
+  instance_type          = var.gateway_instance_type
   key_name               = var.key_pair_name
-  subnet_id              = aws_subnet.public.id
-  vpc_security_group_ids = [aws_security_group.cuez.id]
+  subnet_id              = aws_subnet.virginia_public.id
+  vpc_security_group_ids = [aws_security_group.gateway.id]
 
   root_block_device {
-    volume_size           = var.ebs_volume_size
+    volume_size           = var.gateway_ebs_volume_size
     volume_type           = var.ebs_volume_type
     encrypted             = true
     delete_on_termination = true
   }
 
   tags = {
-    Name = "prod-cuez"
-    Role = "Cuez-Server"
+    Name   = "prod-gateway"
+    Role   = "Gateway-Server"
+    Region = "us-east-1"
   }
 
   volume_tags = {
-    Name = "prod-cuez-volume"
+    Name = "prod-gateway-volume"
   }
 
   lifecycle {
@@ -122,22 +125,34 @@ resource "aws_instance" "cuez" {
 }
 
 ################################################################################
-# Elastic IPs (opcional - uncomment se necessário IP fixo)
+# EC2 Instance - Automator Server (Virginia)
 ################################################################################
-# resource "aws_eip" "vmix" {
-#   instance = aws_instance.vmix.id
-#   domain   = "vpc"
-#
-#   tags = {
-#     Name = "prod-vmix-eip"
-#   }
-# }
+resource "aws_instance" "automator" {
+  provider               = aws.virginia
+  ami                    = data.aws_ami.windows_2025_virginia.id
+  instance_type          = var.automator_instance_type
+  key_name               = var.key_pair_name
+  subnet_id              = aws_subnet.virginia_public.id
+  vpc_security_group_ids = [aws_security_group.automator.id]
 
-# resource "aws_eip" "cuez" {
-#   instance = aws_instance.cuez.id
-#   domain   = "vpc"
-#
-#   tags = {
-#     Name = "prod-cuez-eip"
-#   }
-# }
+  root_block_device {
+    volume_size           = var.automator_ebs_volume_size
+    volume_type           = var.ebs_volume_type
+    encrypted             = true
+    delete_on_termination = true
+  }
+
+  tags = {
+    Name   = "prod-automator"
+    Role   = "Automator-Server"
+    Region = "us-east-1"
+  }
+
+  volume_tags = {
+    Name = "prod-automator-volume"
+  }
+
+  lifecycle {
+    ignore_changes = [ami, user_data]
+  }
+}
