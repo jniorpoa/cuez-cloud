@@ -110,6 +110,7 @@ resource "aws_security_group" "gateway" {
 # RDP (3389/TCP) - Allowlist
 resource "aws_vpc_security_group_ingress_rule" "gateway_rdp" {
   for_each = toset(local.allowed_cidrs)
+  provider = aws.virginia
 
   security_group_id = aws_security_group.gateway.id
   description       = "RDP access from allowlist"
@@ -122,6 +123,7 @@ resource "aws_vpc_security_group_ingress_rule" "gateway_rdp" {
 # HTTP (80/TCP) - Allowlist
 resource "aws_vpc_security_group_ingress_rule" "gateway_http" {
   for_each = toset(local.allowed_cidrs)
+  provider = aws.virginia
 
   security_group_id = aws_security_group.gateway.id
   description       = "HTTP access from allowlist"
@@ -134,6 +136,7 @@ resource "aws_vpc_security_group_ingress_rule" "gateway_http" {
 # HTTPS (443/TCP) - Allowlist
 resource "aws_vpc_security_group_ingress_rule" "gateway_https" {
   for_each = toset(local.allowed_cidrs)
+  provider = aws.virginia
 
   security_group_id = aws_security_group.gateway.id
   description       = "HTTPS access from allowlist"
@@ -145,6 +148,7 @@ resource "aws_vpc_security_group_ingress_rule" "gateway_https" {
 
 # Intra-VPC (all traffic within Virginia VPC)
 resource "aws_vpc_security_group_ingress_rule" "gateway_intra_vpc" {
+  provider          = aws.virginia
   security_group_id = aws_security_group.gateway.id
   description       = "All traffic within Virginia VPC"
   from_port         = -1
@@ -155,6 +159,7 @@ resource "aws_vpc_security_group_ingress_rule" "gateway_intra_vpc" {
 
 # From SP VPC (vMix responses)
 resource "aws_vpc_security_group_ingress_rule" "gateway_from_sp" {
+  provider          = aws.virginia
   security_group_id = aws_security_group.gateway.id
   description       = "All traffic from SP VPC (vMix)"
   from_port         = -1
@@ -165,6 +170,7 @@ resource "aws_vpc_security_group_ingress_rule" "gateway_from_sp" {
 
 # Egress (all outbound)
 resource "aws_vpc_security_group_egress_rule" "gateway_egress" {
+  provider          = aws.virginia
   security_group_id = aws_security_group.gateway.id
   description       = "All outbound traffic"
   ip_protocol       = "-1"
@@ -188,6 +194,7 @@ resource "aws_security_group" "automator" {
 # RDP (3389/TCP) - Allowlist
 resource "aws_vpc_security_group_ingress_rule" "automator_rdp" {
   for_each = toset(local.allowed_cidrs)
+  provider = aws.virginia
 
   security_group_id = aws_security_group.automator.id
   description       = "RDP access from allowlist"
@@ -199,6 +206,7 @@ resource "aws_vpc_security_group_ingress_rule" "automator_rdp" {
 
 # Intra-VPC (all traffic within Virginia VPC)
 resource "aws_vpc_security_group_ingress_rule" "automator_intra_vpc" {
+  provider          = aws.virginia
   security_group_id = aws_security_group.automator.id
   description       = "All traffic within Virginia VPC"
   from_port         = -1
@@ -209,6 +217,7 @@ resource "aws_vpc_security_group_ingress_rule" "automator_intra_vpc" {
 
 # Egress (all outbound)
 resource "aws_vpc_security_group_egress_rule" "automator_egress" {
+  provider          = aws.virginia
   security_group_id = aws_security_group.automator.id
   description       = "All outbound traffic"
   ip_protocol       = "-1"
