@@ -148,20 +148,20 @@ variable "samm_cidr" {
   default     = "201.87.158.160/28"
 }
 
-variable "admin_ip" {
-  description = "Admin personal IP"
+variable "zeroum_ip" {
+  description = "ZEROUM IP"
   type        = string
   default     = "138.97.240.187/32"
 }
 
-variable "admin_ip_2" {
-  description = "Admin secondary IP"
+variable "anselmo_ip" {
+  description = "Anselmo IP"
   type        = string
   default     = "162.120.186.85/32"
 }
 
-variable "admin_ip_3" {
-  description = "Admin tertiary IP"
+variable "jml747_ip" {
+  description = "JML747 IP"
   type        = string
   default     = "201.54.232.170/32"
 }
