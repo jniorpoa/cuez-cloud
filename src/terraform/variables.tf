@@ -157,7 +157,7 @@ variable "zeroum_ip" {
 variable "anselmo_ip" {
   description = "Anselmo IP"
   type        = string
-  default     = "162.120.186.85/32"
+  default     = "177.115.18.228/32"
 }
 
 variable "jml747_ip" {
