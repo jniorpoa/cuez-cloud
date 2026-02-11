@@ -215,6 +215,17 @@ resource "aws_vpc_security_group_ingress_rule" "automator_intra_vpc" {
   cidr_ipv4         = var.virginia_vpc_cidr
 }
 
+# From SP VPC (vMix)
+resource "aws_vpc_security_group_ingress_rule" "automator_from_sp" {
+  provider          = aws.virginia
+  security_group_id = aws_security_group.automator.id
+  description       = "All traffic from SP VPC (vMix)"
+  from_port         = -1
+  to_port           = -1
+  ip_protocol       = "-1"
+  cidr_ipv4         = var.vpc_cidr
+}
+
 # Egress (all outbound)
 resource "aws_vpc_security_group_egress_rule" "automator_egress" {
   provider          = aws.virginia
