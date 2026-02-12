@@ -105,6 +105,19 @@ variable "automator_ebs_volume_size" {
   default     = 100
 }
 
+# EC2 Configuration — VPN (São Paulo)
+variable "vpn_instance_type" {
+  description = "Instance type for VPN server (Pritunl)"
+  type        = string
+  default     = "t3.micro"
+}
+
+variable "vpn_ebs_volume_size" {
+  description = "EBS volume size in GB for VPN server"
+  type        = number
+  default     = 30
+}
+
 # Common EC2 Configuration
 variable "ebs_volume_type" {
   description = "EBS volume type"

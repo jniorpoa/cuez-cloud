@@ -92,6 +92,102 @@ resource "aws_instance" "vmix" {
 }
 
 ################################################################################
+# EC2 Instance - VPN Server / Pritunl (São Paulo)
+################################################################################
+locals {
+  pritunl_user_data = <<-USERDATA
+    #!/bin/bash
+    set -euo pipefail
+    exec > /var/log/pritunl-setup.log 2>&1
+
+    echo "=== Pritunl VPN Setup - $(date) ==="
+
+    # Wait for cloud-init network
+    echo "Waiting for network..."
+    until ping -c1 archive.ubuntu.com &>/dev/null; do sleep 2; done
+
+    export DEBIAN_FRONTEND=noninteractive
+
+    # System update
+    echo "Updating system packages..."
+    apt-get update -y
+    apt-get upgrade -y
+
+    # Install prerequisites
+    apt-get install -y gnupg curl
+
+    # MongoDB 7.0 repository
+    echo "Adding MongoDB 7.0 repository..."
+    curl -fsSL https://www.mongodb.org/static/pgp/server-7.0.asc | \
+      gpg --dearmor -o /usr/share/keyrings/mongodb-server-7.0.gpg
+    echo "deb [signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg] https://repo.mongodb.org/apt/ubuntu noble/mongodb-org/7.0 multiverse" | \
+      tee /etc/apt/sources.list.d/mongodb-org-7.0.list
+
+    # Pritunl repository
+    echo "Adding Pritunl repository..."
+    curl -fsSL https://raw.githubusercontent.com/pritunl/pgp/master/pritunl_repo_pub.asc | \
+      gpg --dearmor -o /usr/share/keyrings/pritunl.gpg
+    echo "deb [signed-by=/usr/share/keyrings/pritunl.gpg] https://repo.pritunl.com/stable/apt noble main" | \
+      tee /etc/apt/sources.list.d/pritunl.list
+
+    # Install MongoDB + Pritunl
+    echo "Installing MongoDB and Pritunl..."
+    apt-get update -y
+    apt-get install -y mongodb-org pritunl
+
+    # Enable and start services
+    echo "Starting services..."
+    systemctl enable mongod pritunl
+    systemctl start mongod
+    sleep 5
+    systemctl start pritunl
+
+    echo "=== Pritunl setup completed - $(date) ==="
+    echo "Run 'sudo pritunl setup-key' to get the initial setup key"
+  USERDATA
+}
+
+resource "aws_instance" "vpn" {
+  ami                    = data.aws_ami.ubuntu_2404.id
+  instance_type          = var.vpn_instance_type
+  key_name               = var.key_pair_name
+  subnet_id              = aws_subnet.saopaulo_public.id
+  vpc_security_group_ids = [aws_security_group.vpn.id]
+  user_data              = local.pritunl_user_data
+
+  root_block_device {
+    volume_size           = var.vpn_ebs_volume_size
+    volume_type           = var.ebs_volume_type
+    encrypted             = true
+    delete_on_termination = true
+  }
+
+  tags = {
+    Name   = "prod-vpn"
+    Role   = "VPN-Server"
+    Region = "sa-east-1"
+  }
+
+  volume_tags = {
+    Name = "prod-vpn-volume"
+  }
+
+  lifecycle {
+    ignore_changes = [ami, user_data]
+  }
+}
+
+# Elastic IP for VPN — IP fixo para profiles OpenVPN
+resource "aws_eip" "vpn" {
+  instance = aws_instance.vpn.id
+  domain   = "vpc"
+
+  tags = {
+    Name = "prod-eip-vpn"
+  }
+}
+
+################################################################################
 # EC2 Instance - Gateway Server (Virginia)
 ################################################################################
 resource "aws_instance" "gateway" {

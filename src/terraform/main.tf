@@ -62,6 +62,27 @@ data "aws_ami" "windows_2025" {
   }
 }
 
+# AMI Ubuntu 24.04 LTS — São Paulo (sa-east-1) — VPN Server
+data "aws_ami" "ubuntu_2404" {
+  most_recent = true
+  owners      = ["099720109477"] # Canonical
+
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  filter {
+    name   = "architecture"
+    values = ["x86_64"]
+  }
+}
+
 # AMI Windows Server 2025 — Virginia (us-east-1)
 data "aws_ami" "windows_2025_virginia" {
   provider    = aws.virginia

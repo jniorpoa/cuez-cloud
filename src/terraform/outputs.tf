@@ -119,6 +119,38 @@ output "automator_public_dns" {
   value       = aws_instance.automator.public_dns
 }
 
+# EC2 VPN Outputs (São Paulo)
+output "vpn_instance_id" {
+  description = "Instance ID of VPN server"
+  value       = aws_instance.vpn.id
+}
+
+output "vpn_private_ip" {
+  description = "Private IP of VPN server"
+  value       = aws_instance.vpn.private_ip
+}
+
+output "vpn_public_ip" {
+  description = "Public IP of VPN server (Elastic IP)"
+  value       = aws_eip.vpn.public_ip
+}
+
+output "vpn_public_dns" {
+  description = "Public DNS of VPN server (Elastic IP)"
+  value       = aws_eip.vpn.public_dns
+}
+
+output "vpn_eip_id" {
+  description = "Elastic IP allocation ID for VPN server"
+  value       = aws_eip.vpn.id
+}
+
+# Security Group — VPN
+output "sg_vpn_id" {
+  description = "ID of the VPN security group (SP)"
+  value       = aws_security_group.vpn.id
+}
+
 # Connection Info
 output "rdp_connection_vmix" {
   description = "RDP connection string for vMix (SP)"
@@ -133,6 +165,16 @@ output "rdp_connection_gateway" {
 output "rdp_connection_automator" {
   description = "RDP connection string for Automator (Virginia)"
   value       = "mstsc /v:${aws_instance.automator.public_ip}"
+}
+
+output "ssh_connection_vpn" {
+  description = "SSH connection string for VPN server (SP)"
+  value       = "ssh -i ${var.key_pair_name}.pem ubuntu@${aws_eip.vpn.public_ip}"
+}
+
+output "pritunl_web_url" {
+  description = "Pritunl web UI URL"
+  value       = "https://${aws_eip.vpn.public_ip}"
 }
 
 # AMI Info
@@ -154,4 +196,14 @@ output "windows_2025_va_ami_id" {
 output "windows_2025_va_ami_name" {
   description = "Windows Server 2025 AMI name (Virginia)"
   value       = data.aws_ami.windows_2025_virginia.name
+}
+
+output "ubuntu_2404_sp_ami_id" {
+  description = "Ubuntu 24.04 LTS AMI ID (São Paulo)"
+  value       = data.aws_ami.ubuntu_2404.id
+}
+
+output "ubuntu_2404_sp_ami_name" {
+  description = "Ubuntu 24.04 LTS AMI name (São Paulo)"
+  value       = data.aws_ami.ubuntu_2404.name
 }

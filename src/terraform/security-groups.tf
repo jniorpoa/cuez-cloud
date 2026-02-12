@@ -94,6 +94,79 @@ resource "aws_vpc_security_group_egress_rule" "vmix_egress" {
 }
 
 ################################################################################
+# Security Group - VPN Server (São Paulo)
+################################################################################
+resource "aws_security_group" "vpn" {
+  name        = "prod-sg-vpn"
+  description = "Security group for Pritunl VPN server (Sao Paulo)"
+  vpc_id      = aws_vpc.saopaulo.id
+
+  tags = {
+    Name = "prod-sg-vpn"
+  }
+}
+
+# HTTPS (443/TCP) - Pritunl web UI + OpenVPN TCP fallback
+resource "aws_vpc_security_group_ingress_rule" "vpn_https" {
+  security_group_id = aws_security_group.vpn.id
+  description       = "HTTPS - Pritunl web UI + OpenVPN TCP"
+  from_port         = 443
+  to_port           = 443
+  ip_protocol       = "tcp"
+  cidr_ipv4         = "0.0.0.0/0"
+}
+
+# OpenVPN (1194/UDP) - VPN tunnel
+resource "aws_vpc_security_group_ingress_rule" "vpn_openvpn" {
+  security_group_id = aws_security_group.vpn.id
+  description       = "OpenVPN UDP tunnel"
+  from_port         = 1194
+  to_port           = 1194
+  ip_protocol       = "udp"
+  cidr_ipv4         = "0.0.0.0/0"
+}
+
+# SSH (22/TCP) - Allowlist
+resource "aws_vpc_security_group_ingress_rule" "vpn_ssh" {
+  for_each = toset(local.allowed_cidrs)
+
+  security_group_id = aws_security_group.vpn.id
+  description       = "SSH access from allowlist"
+  from_port         = 22
+  to_port           = 22
+  ip_protocol       = "tcp"
+  cidr_ipv4         = each.value
+}
+
+# Intra-VPC (all traffic within SP VPC)
+resource "aws_vpc_security_group_ingress_rule" "vpn_intra_vpc" {
+  security_group_id = aws_security_group.vpn.id
+  description       = "All traffic within SP VPC"
+  from_port         = -1
+  to_port           = -1
+  ip_protocol       = "-1"
+  cidr_ipv4         = var.vpc_cidr
+}
+
+# From Virginia VPC
+resource "aws_vpc_security_group_ingress_rule" "vpn_from_virginia" {
+  security_group_id = aws_security_group.vpn.id
+  description       = "All traffic from Virginia VPC"
+  from_port         = -1
+  to_port           = -1
+  ip_protocol       = "-1"
+  cidr_ipv4         = var.virginia_vpc_cidr
+}
+
+# Egress (all outbound)
+resource "aws_vpc_security_group_egress_rule" "vpn_egress" {
+  security_group_id = aws_security_group.vpn.id
+  description       = "All outbound traffic"
+  ip_protocol       = "-1"
+  cidr_ipv4         = "0.0.0.0/0"
+}
+
+################################################################################
 # Security Group - Gateway Server (Virginia)
 ################################################################################
 resource "aws_security_group" "gateway" {
