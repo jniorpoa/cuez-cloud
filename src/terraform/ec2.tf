@@ -116,12 +116,12 @@ locals {
     # Install prerequisites
     apt-get install -y gnupg curl
 
-    # MongoDB 7.0 repository
-    echo "Adding MongoDB 7.0 repository..."
-    curl -fsSL https://www.mongodb.org/static/pgp/server-7.0.asc | \
-      gpg --dearmor -o /usr/share/keyrings/mongodb-server-7.0.gpg
-    echo "deb [signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg] https://repo.mongodb.org/apt/ubuntu noble/mongodb-org/7.0 multiverse" | \
-      tee /etc/apt/sources.list.d/mongodb-org-7.0.list
+    # MongoDB 8.0 repository (7.0 não tem repo pra Noble)
+    echo "Adding MongoDB 8.0 repository..."
+    curl -fsSL https://www.mongodb.org/static/pgp/server-8.0.asc | \
+      gpg --dearmor -o /usr/share/keyrings/mongodb-server-8.0.gpg
+    echo "deb [signed-by=/usr/share/keyrings/mongodb-server-8.0.gpg] https://repo.mongodb.org/apt/ubuntu noble/mongodb-org/8.0 multiverse" | \
+      tee /etc/apt/sources.list.d/mongodb-org-8.0.list
 
     # Pritunl repository
     echo "Adding Pritunl repository..."

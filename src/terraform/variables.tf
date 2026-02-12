@@ -161,17 +161,6 @@ variable "samm_cidr" {
   default     = "201.87.158.160/28"
 }
 
-variable "zeroum_ip" {
-  description = "ZEROUM IP"
-  type        = string
-  default     = "138.97.240.187/32"
-}
-
-variable "anselmo_ip" {
-  description = "Anselmo IP"
-  type        = string
-  default     = "177.115.18.228/32"
-}
 
 variable "jml747_ip" {
   description = "JML747 IP"

@@ -10,8 +10,6 @@ locals {
     var.mundivox_cidr_2, # MUNDIVOX 2
     var.embratel_cidr,   # EMBRATEL
     var.samm_cidr,       # SAMM
-    var.zeroum_ip,       # ZEROUM
-    var.anselmo_ip,      # Anselmo
     var.jml747_ip,       # JML747
   ]
 }
@@ -126,16 +124,14 @@ resource "aws_vpc_security_group_ingress_rule" "vpn_openvpn" {
   cidr_ipv4         = "0.0.0.0/0"
 }
 
-# SSH (22/TCP) - Allowlist
+# SSH (22/TCP) - Open (VPN server needs to be accessible for setup)
 resource "aws_vpc_security_group_ingress_rule" "vpn_ssh" {
-  for_each = toset(local.allowed_cidrs)
-
   security_group_id = aws_security_group.vpn.id
-  description       = "SSH access from allowlist"
+  description       = "SSH access"
   from_port         = 22
   to_port           = 22
   ip_protocol       = "tcp"
-  cidr_ipv4         = each.value
+  cidr_ipv4         = "0.0.0.0/0"
 }
 
 # Intra-VPC (all traffic within SP VPC)
