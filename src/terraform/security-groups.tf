@@ -5,11 +5,12 @@
 # Lista de CIDRs permitidos (Allowlist)
 locals {
   allowed_cidrs = [
-    var.algar_cidr,      # ALGAR
-    var.mundivox_cidr_1, # MUNDIVOX 1
-    var.mundivox_cidr_2, # MUNDIVOX 2
+    var.algar_cidr,      # ALGAR (RJ)
+    var.mundivox_cidr_1, # MUNDIVOX (RJ)
+    var.mundivox_cidr_2, # MUNDIVOX (SP)
     var.embratel_cidr,   # EMBRATEL
-    var.samm_cidr,       # SAMM
+    var.samm_cidr,       # SAMM (SP)
+    var.ufinet_cidr,     # UFINET (RJ)
     var.jml747_ip,       # JML747
   ]
 }

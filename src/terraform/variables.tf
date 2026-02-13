@@ -162,6 +162,12 @@ variable "samm_cidr" {
 }
 
 
+variable "ufinet_cidr" {
+  description = "UFINET RJ IP range"
+  type        = string
+  default     = "189.84.231.16/28"
+}
+
 variable "jml747_ip" {
   description = "JML747 IP"
   type        = string
