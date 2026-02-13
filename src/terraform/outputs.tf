@@ -68,13 +68,18 @@ output "vmix_private_ip" {
 }
 
 output "vmix_public_ip" {
-  description = "Public IP of vMix server"
-  value       = aws_instance.vmix.public_ip
+  description = "Public IP of vMix server (Elastic IP)"
+  value       = aws_eip.vmix.public_ip
 }
 
 output "vmix_public_dns" {
-  description = "Public DNS of vMix server"
-  value       = aws_instance.vmix.public_dns
+  description = "Public DNS of vMix server (Elastic IP)"
+  value       = aws_eip.vmix.public_dns
+}
+
+output "vmix_eip_id" {
+  description = "Elastic IP allocation ID for vMix server"
+  value       = aws_eip.vmix.id
 }
 
 # EC2 Gateway Outputs (Virginia)
@@ -89,13 +94,18 @@ output "gateway_private_ip" {
 }
 
 output "gateway_public_ip" {
-  description = "Public IP of Gateway server"
-  value       = aws_instance.gateway.public_ip
+  description = "Public IP of Gateway server (Elastic IP)"
+  value       = aws_eip.gateway.public_ip
 }
 
 output "gateway_public_dns" {
-  description = "Public DNS of Gateway server"
-  value       = aws_instance.gateway.public_dns
+  description = "Public DNS of Gateway server (Elastic IP)"
+  value       = aws_eip.gateway.public_dns
+}
+
+output "gateway_eip_id" {
+  description = "Elastic IP allocation ID for Gateway server"
+  value       = aws_eip.gateway.id
 }
 
 # EC2 Automator Outputs (Virginia)
@@ -110,13 +120,18 @@ output "automator_private_ip" {
 }
 
 output "automator_public_ip" {
-  description = "Public IP of Automator server"
-  value       = aws_instance.automator.public_ip
+  description = "Public IP of Automator server (Elastic IP)"
+  value       = aws_eip.automator.public_ip
 }
 
 output "automator_public_dns" {
-  description = "Public DNS of Automator server"
-  value       = aws_instance.automator.public_dns
+  description = "Public DNS of Automator server (Elastic IP)"
+  value       = aws_eip.automator.public_dns
+}
+
+output "automator_eip_id" {
+  description = "Elastic IP allocation ID for Automator server"
+  value       = aws_eip.automator.id
 }
 
 # EC2 VPN Outputs (São Paulo)
@@ -154,17 +169,17 @@ output "sg_vpn_id" {
 # Connection Info
 output "rdp_connection_vmix" {
   description = "RDP connection string for vMix (SP)"
-  value       = "mstsc /v:${aws_instance.vmix.public_ip}"
+  value       = "mstsc /v:${aws_eip.vmix.public_ip}"
 }
 
 output "rdp_connection_gateway" {
   description = "RDP connection string for Gateway (Virginia)"
-  value       = "mstsc /v:${aws_instance.gateway.public_ip}"
+  value       = "mstsc /v:${aws_eip.gateway.public_ip}"
 }
 
 output "rdp_connection_automator" {
   description = "RDP connection string for Automator (Virginia)"
-  value       = "mstsc /v:${aws_instance.automator.public_ip}"
+  value       = "mstsc /v:${aws_eip.automator.public_ip}"
 }
 
 output "ssh_connection_vpn" {

@@ -91,6 +91,16 @@ resource "aws_instance" "vmix" {
   }
 }
 
+# Elastic IP for vMix — IP fixo para acesso RDP/SRT
+resource "aws_eip" "vmix" {
+  instance = aws_instance.vmix.id
+  domain   = "vpc"
+
+  tags = {
+    Name = "prod-eip-vmix"
+  }
+}
+
 ################################################################################
 # EC2 Instance - VPN Server / Pritunl (São Paulo)
 ################################################################################
@@ -220,6 +230,17 @@ resource "aws_instance" "gateway" {
   }
 }
 
+# Elastic IP for Gateway — IP fixo
+resource "aws_eip" "gateway" {
+  provider = aws.virginia
+  instance = aws_instance.gateway.id
+  domain   = "vpc"
+
+  tags = {
+    Name = "prod-eip-gateway"
+  }
+}
+
 ################################################################################
 # EC2 Instance - Automator Server (Virginia)
 ################################################################################
@@ -250,5 +271,16 @@ resource "aws_instance" "automator" {
 
   lifecycle {
     ignore_changes = [ami, user_data]
+  }
+}
+
+# Elastic IP for Automator — IP fixo
+resource "aws_eip" "automator" {
+  provider = aws.virginia
+  instance = aws_instance.automator.id
+  domain   = "vpc"
+
+  tags = {
+    Name = "prod-eip-automator"
   }
 }
